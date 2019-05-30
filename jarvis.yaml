@@ -1,5 +1,8 @@
 - hosts: localhost
   tasks:
+#  remote_user: stark
+#  become: yes
+#  become_method: su
 
   - name: Create jarvisnet network
     docker_network:
@@ -67,7 +70,7 @@
           aliases:
             - db_nextcloud2
       volumes:
-        - /opt/appdata/db_nextcloud:/config
+        - /opt/appdata/db_nextcloud2:/config
       restart_policy: unless-stopped
       state: started
 
@@ -83,6 +86,7 @@
         com.centurylinklabs.watchtower.enable: "true"
       labels:
         traefik.enable: "true"
+        traefik.protocol: "https"
         traefik.frontend.redirect.entryPoint: "https"
         traefik.frontend.rule: "Host:nextcloud2.wooster.xyz"
         traefik.port: "443"
