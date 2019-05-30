@@ -1,56 +1,56 @@
 - hosts: localhost
   tasks:
-#  remote_user: stark
-#  become: yes
-#  become_method: su
 
   - name: Create jarvisnet network
     docker_network:
       name: jarvisnet
 
-  # - name: Setup MariaDB for Home Assistant
-  #   docker_container:
-  #     name: db_homeassistant
-  #     image: linuxserver/mariadb
-  #     pull: yes
-  #     env:
-  #       PUID: "1000"
-  #       PGID: "1000"
-  #       MYSQL_ROOT_PASSWORD: "PcwJ9Qd5DT"
-  #       MYSQL_DATABASE: "homeassistant"
-  #       MYSQL_USER: "homeassistant"
-  #       MYSQL_PASSWORD: "homeassistant"
-  #       TZ: "America/Los_Angeles"
-  #       com.centurylinklabs.watchtower.enable: "true"
-  #     networks:
-  #       - name: jarvisnet
-  #         aliases:
-  #           - db_homeassistant
-  #     volumes:
-  #       - /opt/appdata/db_homeassistant:/config
-  #     restart_policy: unless-stopped
-  #     state: started
+### ---------------- MariaDB Home Assistant ------------------- ###
+  - name: Setup MariaDB for Home Assistant
+    docker_container:
+      name: db_homeassistant
+      image: linuxserver/mariadb
+      pull: yes
+      env:
+        PUID: "1000"
+        PGID: "1000"
+        MYSQL_ROOT_PASSWORD: "PcwJ9Qd5DT"
+        MYSQL_DATABASE: "homeassistant"
+        MYSQL_USER: "homeassistant"
+        MYSQL_PASSWORD: "homeassistant"
+        TZ: "America/Los_Angeles"
+        com.centurylinklabs.watchtower.enable: "true"
+      networks:
+        - name: jarvisnet
+          aliases:
+            - db_homeassistant
+      volumes:
+        - /opt/appdata/db_homeassistant:/config
+      restart_policy: unless-stopped
+      state: started
 
-  # - name: Setup Home Assistant
-  #   docker_container:
-  #     name: home-assistant
-  #     image: homeassistant/home-assistant
-  #     pull: yes
-  #     volumes:
-  #       - /opt/appdata/homeassistant:/config
-  #     env:
-  #       com.centurylinklabs.watchtower.enable: "true"
-  #     labels:
-  #       traefik.enable: "true"
-  #       traefik.frontend.rule: "Host:home.wooster.xyz,home-assistant.wooster.xyz"
-  #       traefik.port: "8123"
-      # networks:
-      #   - name: jarvisnet
-      #     aliases:
-      #       - home-assistant
-      # restart_policy: unless-stopped
-      # state: started
+### ---------------- Home Assistant ------------------- ###
+  - name: Setup Home Assistant
+    docker_container:
+      name: home-assistant
+      image: homeassistant/home-assistant
+      pull: yes
+      volumes:
+        - /opt/appdata/homeassistant:/config
+      env:
+        com.centurylinklabs.watchtower.enable: "true"
+      labels:
+        traefik.enable: "true"
+        traefik.frontend.rule: "Host:home.wooster.xyz,home-assistant.wooster.xyz"
+        traefik.port: "8123"
+      networks:
+        - name: jarvisnet
+          aliases:
+            - home-assistant
+      restart_policy: unless-stopped
+      state: started
 
+### ---------------- MariaDB Nextcloud ------------------- ###
   - name: Setup MariaDB for Nextcloud
     docker_container:
       name: db_nextcloud2
@@ -74,6 +74,7 @@
       restart_policy: unless-stopped
       state: started
 
+### ---------------- Nextcloud ------------------- ###
   - name: Setup Nextcloud
     docker_container:
       name: nextcloud2
