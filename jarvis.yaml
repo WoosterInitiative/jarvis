@@ -46,10 +46,11 @@
         traefik.port: "8123"
       ports:
         - "8123:8123"
-      networks:
-        - name: plexguide
-          aliases:
-            - home-assistant
+      network_mode: host
+      # networks:
+      #   - name: plexguide
+      #     aliases:
+      #       - home-assistant
       restart_policy: unless-stopped
       state: started
 
