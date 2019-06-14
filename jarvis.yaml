@@ -1,9 +1,10 @@
 - hosts: localhost
+  gather_facts: False
   tasks:
 
-  - name: Create jarvisnet network
+  - name: Create plexguide network
     docker_network:
-      name: jarvisnet
+      name: plexguide
 
 ### ---------------- MariaDB Home Assistant ------------------- ###
   - name: Setup MariaDB for Home Assistant
@@ -21,7 +22,7 @@
         TZ: "America/Los_Angeles"
         com.centurylinklabs.watchtower.enable: "true"
       networks:
-        - name: jarvisnet
+        - name: plexguide
           aliases:
             - db_homeassistant
       volumes:
@@ -43,8 +44,10 @@
         traefik.enable: "true"
         traefik.frontend.rule: "Host:home.wooster.xyz,home-assistant.wooster.xyz"
         traefik.port: "8123"
+      ports:
+        - "8123:8123"
       networks:
-        - name: jarvisnet
+        - name: plexguide
           aliases:
             - home-assistant
       restart_policy: unless-stopped
@@ -53,7 +56,7 @@
 ### ---------------- MariaDB Nextcloud ------------------- ###
   - name: Setup MariaDB for Nextcloud
     docker_container:
-      name: db_nextcloud2
+      name: db_nextcloud
       image: linuxserver/mariadb
       pull: yes
       env:
@@ -66,34 +69,55 @@
         TZ: "America/Los_Angeles"
         com.centurylinklabs.watchtower.enable: "true"
       networks:
-        - name: jarvisnet
+        - name: plexguide
           aliases:
-            - db_nextcloud2
+            - db_nextcloud
       volumes:
-        - /opt/appdata/db_nextcloud2:/config
+        - /opt/appdata/db_nextcloud:/config
       restart_policy: unless-stopped
       state: started
 
 ### ---------------- Nextcloud ------------------- ###
   - name: Setup Nextcloud
     docker_container:
-      name: nextcloud2
+      name: nextcloud
       image: linuxserver/nextcloud
       pull: yes
       volumes:
-        - /opt/appdata/nextcloud2:/config
-        - /mnt/fillmore/nextcloud2:/data
+        - /opt/appdata/nextcloud:/config
+        - /mnt/fillmore/nextcloud:/data
       env:
         com.centurylinklabs.watchtower.enable: "true"
       labels:
         traefik.enable: "true"
         traefik.protocol: "https"
         traefik.frontend.redirect.entryPoint: "https"
-        traefik.frontend.rule: "Host:nextcloud2.wooster.xyz"
+        traefik.frontend.rule: "Host:nextcloud.wooster.xyz"
         traefik.port: "443"
       networks:
-        - name: jarvisnet
+        - name: plexguide
           aliases:
-            - nextcloud2
+            - nextcloud
+      restart_policy: unless-stopped
+      state: started
+
+### ------------------ Samba --------------------###
+  - name: Setup Samba
+    docker_container:
+      name: samba
+      image: dperson/samba
+      pull: yes
+      volumes:
+        - /mnt/fillmore:/jarvis
+      env:
+        USERID: "1000"
+        GROUPID: "1000"
+        TZ: "America/Los_Angeles"
+        NMBD: "True"
+        RECYCLE: "False"
+      networks:
+        - name: plexguide
+          aliases:
+            - samba
       restart_policy: unless-stopped
       state: started
