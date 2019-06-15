@@ -47,13 +47,14 @@
         traefik.docker.network: "plexguide"
       ports:
         - "8123:8123"
-      network_mode: host
+#      network_mode: host
       networks:
         - name: plexguide
           aliases:
             - home-assistant
       restart_policy: unless-stopped
       state: started
+      purge_networks: yes
 
 ### ---------------- MariaDB Nextcloud ------------------- ###
   - name: Setup MariaDB for Nextcloud
