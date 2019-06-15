@@ -47,13 +47,15 @@
         traefik.docker.network: "plexguide"
       ports:
         - "8123:8123"
-      network_mode: host
+        - "8989:8989"
+      # network_mode: host
       networks:
         - name: plexguide
           aliases:
             - home-assistant
       restart_policy: unless-stopped
       state: started
+      purge_networks: yes
 
 ### ---------------- MariaDB Nextcloud ------------------- ###
   - name: Setup MariaDB for Nextcloud
@@ -121,5 +123,33 @@
         - name: plexguide
           aliases:
             - samba
+      restart_policy: unless-stopped
+      state: started
+
+### ------------------ Sonarr --------------------###
+  - name: Setup Sonarr
+    docker_container:
+      name: sonarr
+      image: linuxserver/sonarr
+      pull: yes
+      volumes:
+        - /mnt:/mnt
+        - /opt/appdata/sonarr:/config
+      env:
+        USERID: "1000"
+        GROUPID: "1000"
+        TZ: "America/Los_Angeles"
+        com.centurylinklabs.watchtower.enable: "true"
+      labels:
+        traefik.enable: "true"
+        traefik.frontend.rule: "Host:sonarr.wooster.xyz"
+        traefik.port: "8989"
+        traefik.docker.network: "plexguide"
+      ports:
+        - "8990:8989"
+      networks:
+        - name: plexguide
+          aliases:
+            - sonarr
       restart_policy: unless-stopped
       state: started
