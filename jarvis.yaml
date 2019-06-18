@@ -38,6 +38,7 @@
       pull: yes
       volumes:
         - /opt/appdata/homeassistant:/config
+        - /etc/localtime:/etc/localtime:ro
       env:
         com.centurylinklabs.watchtower.enable: "true"
       labels:
