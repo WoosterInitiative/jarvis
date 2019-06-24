@@ -120,8 +120,8 @@
         NMBD: "True"
         RECYCLE: "False"
       ports:
-        - "137:137/udp"
-        - "137:138/udp"
+        # - "137:137/udp"
+        # - "137:138/udp"
         - "139:139/tcp"
         - "445:445/tcp"
       networks:
