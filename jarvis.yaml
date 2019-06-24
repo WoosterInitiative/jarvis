@@ -158,3 +158,47 @@
             - sonarr
       restart_policy: unless-stopped
       state: started
+
+### ------------------ Radarr --------------------###
+  - name: Setup Radarr
+    docker_container:
+      name: radarr
+      image: linuxserver/radarr
+      pull: yes
+      volumes:
+        - /mnt:/mnt
+        - /opt/appdata/radarr:/config
+      env:
+        PUID: "1000"
+        GUID: "1000"
+        TZ: "America/Los_Angeles"
+        com.centurylinklabs.watchtower.enable: "true"
+      labels:
+        traefik.enable: "true"
+        traefik.frontend.rule: "Host:radarr.wooster.xyz"
+        traefik.port: "7878"
+        traefik.docker.network: "plexguide"
+      ports:
+        - "7878:7878"
+      networks:
+        - name: plexguide
+          aliases:
+            - radarr
+      restart_policy: unless-stopped
+      state: started
+
+### ------------------ Watchtower --------------------###
+  - name: Setup Watchtower
+    docker_container:
+      name: watchtower
+      image: v2tech/watchtower
+      pull: yes
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      command: "--label-enable --cleanup --interval 600"
+      networks:
+        - name: plexguide
+          aliases:
+            - sonarr
+      restart_policy: unless-stopped
+      state: started
