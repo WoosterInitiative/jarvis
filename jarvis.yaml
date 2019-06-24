@@ -141,8 +141,8 @@
         - /mnt:/mnt
         - /opt/appdata/sonarr:/config
       env:
-        USERID: "1000"
-        GROUPID: "1000"
+        PUID: "1000"
+        GUID: "1000"
         TZ: "America/Los_Angeles"
         com.centurylinklabs.watchtower.enable: "true"
       labels:
