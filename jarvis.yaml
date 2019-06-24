@@ -207,7 +207,7 @@
   - name: Setup Duplicati
     docker_container:
       name: duplicati
-      image: linuxserver:duplicati
+      image: linuxserver/duplicati
       pull: yes
       volumes:
         - /mnt:/mnt
