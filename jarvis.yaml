@@ -202,3 +202,29 @@
             - sonarr
       restart_policy: unless-stopped
       state: started
+
+### ------------------ Duplicati --------------------###
+  - name: Setup Duplicati
+    docker_container:
+      name: duplicati
+      image: linuxserver:duplicati
+      pull: yes
+      volumes:
+        - /mnt:/mnt
+        - /opt/appdata/duplicati:/config
+      env:
+        PUID: "1000"
+        GUID: "1000"
+        TZ: "America/Los_Angeles"
+        com.centurylinklabs.watchtower.enable: "true"
+      labels:
+        traefik.enable: "true"
+        traefik.frontend.rule: "Host:duplicati.wooster.xyz"
+        traefik.port: "8200"
+        traefik.docker.network: "plexguide"
+      networks:
+        - name: plexguide
+          aliases:
+            - duplicati
+      restart_policy: unless-stopped
+      state: started
