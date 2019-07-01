@@ -195,11 +195,15 @@
       pull: yes
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-      command: "--label-enable --cleanup --interval 600"
+        - /etc/localtime:/etc/localtime:ro
+      command: "--debug --cleanup --interval 1800"
+#      env:
+#        REPO_USER: ""
+#        REPO_PASS: ""
       networks:
         - name: plexguide
           aliases:
-            - sonarr
+            - watchtower
       restart_policy: unless-stopped
       state: started
 
