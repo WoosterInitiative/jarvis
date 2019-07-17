@@ -187,27 +187,36 @@
       restart_policy: unless-stopped
       state: started
 
-### ------------------ Watchtower --------------------###
-  - name: Setup Watchtower
+### ------------------ Tautulli --------------------- ###
+  - name: Setup Tautulli
     docker_container:
-      name: watchtower
-      image: v2tec/watchtower
+      name: tautulli
+      image: linuxserver/tautulli
       pull: yes
       volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - /etc/localtime:/etc/localtime:ro
-      command: "--debug --cleanup --interval 1800"
-#      env:
-#        REPO_USER: ""
-#        REPO_PASS: ""
+        - /opt/appdata/plex/database/Library/Application Support/Plex Media Server/Logs:/logs
+        - /opt/appdata/tautulli/scripts:/scripts
+        - /opt/appdata/tautulli:/config
+      env:
+        PUID: "1000"
+        PGID: "1000"
+        TZ: "America/Los_Angeles"
+        com.centurylinklabs.watchtower.enable: "true"
+      labels:
+        traefik.enable: "true"
+        traefik.frontend.rule: "Host:tautulli.wooster.xyz"
+        traefik.port: "8181"
+        traefik.docker.network: "plexguide"
+      ports:
+        - "8181:8181"
       networks:
         - name: plexguide
           aliases:
-            - watchtower
+            - tautulli
       restart_policy: unless-stopped
       state: started
 
-### ------------------ Duplicati --------------------###
+### ------------------ Duplicati -------------------- ###
   - name: Setup Duplicati
     docker_container:
       name: duplicati
@@ -230,5 +239,25 @@
         - name: plexguide
           aliases:
             - duplicati
+      restart_policy: unless-stopped
+      state: started
+
+### ------------------ Watchtower --------------------###
+  - name: Setup Watchtower
+    docker_container:
+      name: watchtower
+      image: v2tec/watchtower
+      pull: yes
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /etc/localtime:/etc/localtime:ro
+      command: "--debug --cleanup --interval 1800"
+#      env:
+#        REPO_USER: ""
+#        REPO_PASS: ""
+      networks:
+        - name: plexguide
+          aliases:
+            - watchtower
       restart_policy: unless-stopped
       state: started
