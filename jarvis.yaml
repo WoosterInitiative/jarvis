@@ -246,7 +246,8 @@
   - name: Setup OpenVPN-AS
     docker_container:
       image: linuxserver/openvpn-as
-      container_name: openvpn-as
+      name: openvpn-as
+      pull: yes
       cap_add:
         - NET_ADMIN
       environment:
