@@ -248,25 +248,31 @@
       image: linuxserver/openvpn-as
       name: openvpn-as
       pull: yes
-      cap_add:
-        - NET_ADMIN
-      environment:
+#      capabilities:
+#        - NET_ADMIN
+      env:
         PUID: "1000"
         PGID: "1000"
         TZ: "America/Los_Angeles"
         com.centurylinklabs.watchtower.enable: "true"
       volumes:
         - /opt/appdata/openvpn-as:/config
+      networks:
+        - name: plexguide
+          aliases:
+            - openvpn
       labels:
+#        traefik.frontend.redirect.entryPoint: "https"
+#        traefik.protocol: "https"
         traefik.enable: "true"
         traefik.frontend.rule: "Host:openvpn.wooster.xyz"
-        traefik.port: "9443"
+        traefik.port: "943"
         traefik.docker.network: "plexguide"
       ports:
         - 943:943
         - 9443:9443
         - 1194:1194/udp
-      restart: unless-stopped
+      restart_policy: unless-stopped
       state: started
 
 ### ------------------ Watchtower --------------------###
