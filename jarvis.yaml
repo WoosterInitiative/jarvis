@@ -248,8 +248,8 @@
       image: linuxserver/openvpn-as
       name: openvpn-as
       pull: yes
-#      capabilities:
-#        - NET_ADMIN
+      capabilities:
+        - NET_ADMIN
       env:
         PUID: "1000"
         PGID: "1000"
