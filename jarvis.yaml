@@ -263,9 +263,9 @@
             - openvpn
       labels:
 #        traefik.frontend.redirect.entryPoint: "https"
-#        traefik.protocol: "https"
+        traefik.protocol: "https"
         traefik.enable: "true"
-        traefik.frontend.rule: "Host:openvpn.wooster.xyz"
+        traefik.frontend.rule: "Host:ovpn.wooster.xyz"
         traefik.port: "943"
         traefik.docker.network: "plexguide"
       ports:
