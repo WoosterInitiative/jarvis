@@ -9,6 +9,7 @@ services:
       TZ: "America/Los_Angeles"
     labels:
       traefik.enable: "true"
+#      traefik.frontend.priority: "50"
       traefik.frontend.rule: "Host:house.wooster.xyz"
       traefik.port: "80"
       traefik.docker.network: "plexguide"
@@ -19,12 +20,12 @@ services:
       - /opt/appdata/grocy:/config
 
   barcodebuddy:
-    # build:
-    #   context: ./docker-barcodebuddy
+    build:
+      context: /opt/barcodebuddy-docker
     #   args:
     #     BUILD_DATE: "test"
     #     VERSION: "0.1"
-    image: Forceu/barcodebuddy-docker
+    image: woosterinitiative/barcodebuddy-docker:v1
     container_name: barcodebuddy
     environment:
       PUID: 1000
@@ -32,12 +33,14 @@ services:
       TZ: "America/Los_Angeles"
     labels:
       traefik.enable: "true"
+#      traefik.frontend.priority: "10"
       traefik.frontend.rule: "Host:barcodebuddy.wooster.xyz"
       traefik.port: "80"
       traefik.docker.network: "plexguide"
     restart: unless-stopped
-    ports:
-      - "47631:47631"
+#    ports:
+#      - "882:80"
+#      - "47631:47631"
     networks:
       - jarvis
     volumes:
