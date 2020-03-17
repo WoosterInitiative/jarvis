@@ -19,12 +19,12 @@ services:
       - /opt/appdata/grocy:/config
 
   barcodebuddy:
-    build:
-      context: ./docker-barcodebuddy
-      args:
-        BUILD_DATE: "test"
-        VERSION: "0.1"
-    image: barcodebuddy
+    # build:
+    #   context: ./docker-barcodebuddy
+    #   args:
+    #     BUILD_DATE: "test"
+    #     VERSION: "0.1"
+    image: Forceu/barcodebuddy-docker
     container_name: barcodebuddy
     environment:
       PUID: 1000
