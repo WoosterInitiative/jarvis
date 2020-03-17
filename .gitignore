@@ -1,1 +1,4 @@
 *.retry
+/deploy
+/file_list.txt
+/pull

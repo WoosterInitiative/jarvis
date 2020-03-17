@@ -1,0 +1,49 @@
+version: '3'
+services:
+  grocy:
+    image: "linuxserver/grocy"
+    container_name: grocy
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: "America/Los_Angeles"
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:house.wooster.xyz"
+      traefik.port: "80"
+      traefik.docker.network: "plexguide"
+    restart: unless-stopped
+    networks:
+      - jarvis
+    volumes:
+      - /opt/appdata/grocy:/config
+
+  barcodebuddy:
+    build:
+      context: ./docker-barcodebuddy
+      args:
+        BUILD_DATE: "test"
+        VERSION: "0.1"
+    image: barcodebuddy
+    container_name: barcodebuddy
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: "America/Los_Angeles"
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:barcodebuddy.wooster.xyz"
+      traefik.port: "80"
+      traefik.docker.network: "plexguide"
+    restart: unless-stopped
+    ports:
+      - "47631:47631"
+    networks:
+      - jarvis
+    volumes:
+      - /opt/appdata/barcodebuddy:/config
+
+networks:
+  jarvis:
+    external:
+      name: plexguide
