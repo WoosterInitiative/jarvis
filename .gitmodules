@@ -1,3 +1,0 @@
-[submodule "docker-barcodebuddy"]
-	path = docker-barcodebuddy
-	url = https://github.com/WoosterInitiative/docker-barcodebuddy.git
