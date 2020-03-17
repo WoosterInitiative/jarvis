@@ -1,0 +1,3 @@
+[submodule "docker-barcodebuddy"]
+	path = docker-barcodebuddy
+	url = C:UserskarlDocumentsGitHubdocker-barcodebuddy
