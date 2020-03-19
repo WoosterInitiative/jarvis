@@ -105,19 +105,19 @@ services:
       - /mnt/fillmore/nextcloud:/data
 
   magic_mirror:
-    image:
-      container_name: magic_mirror
-      environment:
-        TZ: "America/Los_Angeles"
-      restart: unless-stopped
-      networks:
-        - jarvis:
-      ports:
-        - "664:8080"
-      volumes:
-        - /opt/appdata/magic_mirror/config:/opt/magic_mirror/config
-        - /opt/appdata/magic_mirror/modules:/opt/magicmirror/modules
-        - /etc/localtime:/etc/localtime:ro
+    image: bastilimbach/docker-magicmirror
+    container_name: magic-mirror
+    environment:
+      TZ: "America/Los_Angeles"
+    restart: unless-stopped
+    networks:
+      - jarvis
+    ports:
+      - "664:8080"
+    volumes:
+      - /opt/appdata/magic_mirror/config:/opt/magic_mirror/config
+      - /opt/appdata/magic_mirror/modules:/opt/magicmirror/modules
+      - /etc/localtime:/etc/localtime:ro
 
 networks:
   jarvis:
