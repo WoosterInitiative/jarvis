@@ -119,6 +119,25 @@ services:
       - /opt/appdata/magic_mirror/modules:/opt/magicmirror/modules
       - /etc/localtime:/etc/localtime:ro
 
+  samba:
+    image: dperson/samba
+    container_name: samba
+    environment:
+      USERID: 1000
+      GROUPID: 1000
+      TZ: "America/Los_Angeles"
+      NMBD: "True"
+      RECYCLE: "False"
+    restart: unless-stopped
+    networks:
+      - jarvis
+    ports:
+      - "139:139/tcp"
+      - "445:445/tcp"
+    volumes:
+      - /mnt/fillmore:/jarvis
+      - /opt:/opt
+
 networks:
   jarvis:
     external:
