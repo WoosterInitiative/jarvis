@@ -81,7 +81,7 @@ services:
     ports:
       - "747:80"
     volumes:
-      - /opt/appdata/phpmyadmin:/sessions      
+      - /opt/appdata/phpmyadmin:/sessions
 
   nextcloud:
     image: linuxserver/nextcloud
@@ -103,6 +103,21 @@ services:
     volumes:
       - /opt/appdata/nextcloud:/config
       - /mnt/fillmore/nextcloud:/data
+
+  magic_mirror:
+    image:
+      container_name: magic_mirror
+      environment:
+        TZ: "America/Los_Angeles"
+      restart: unless-stopped
+      networks:
+        - jarvis:
+      ports:
+        - "664:8080"
+      volumes:
+        - /opt/appdata/magic_mirror/config:/opt/magic_mirror/config
+        - /opt/appdata/magic_mirror/modules:/opt/magicmirror/modules
+        - /etc/localtime:/etc/localtime:ro
 
 networks:
   jarvis:
