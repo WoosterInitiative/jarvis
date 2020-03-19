@@ -60,8 +60,28 @@ services:
     restart: unless-stopped
     networks:
       - jarvis
+    ports:
+      - "3306:3306"
     volumes:
       - /opt/appdata/nextcloud_db:/config
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+    labels:
+      traefik.enable: "false"
+      traefik.frontend.rule: "Host:sqladmin.wooster.xyz"
+      traefik.port: "80"
+      treafik.network: "plexguide"
+    restart: unless-stopped
+    networks:
+      - jarvis
+    ports:
+      - "747:80"
+    volumes:
+      - /opt/appdata/phpmyadmin:/sessions      
 
   nextcloud:
     image: linuxserver/nextcloud
@@ -74,7 +94,7 @@ services:
       traefik.enable: "true"
       traefik.protocol: "https"
       traefik.frontend.redirect.entryPoint: "https"
-      traefik.frontend.rule: "Host:barcodebuddy.wooster.xyz"
+      traefik.frontend.rule: "Host:files.wooster.xyz"
       traefik.port: "443"
       traefik.docker.network: "plexguide"
     restart: unless-stopped
