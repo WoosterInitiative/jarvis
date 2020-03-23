@@ -20,12 +20,12 @@ services:
       - /opt/appdata/grocy:/config
 
   barcodebuddy:
-    build:
-      context: /opt/barcodebuddy-docker
+#    build:
+#      context: /opt/barcodebuddy-docker
     #   args:
     #     BUILD_DATE: "test"
     #     VERSION: "0.1"
-    image: woosterinitiative/barcodebuddy-docker:v1
+    image: f0rc3/barcodebuddy-docker
     container_name: barcodebuddy
     environment:
       PUID: 1000
@@ -119,24 +119,32 @@ services:
       - /opt/appdata/magic_mirror/modules:/opt/magicmirror/modules
       - /etc/localtime:/etc/localtime:ro
 
-  samba:
-    image: dperson/samba
-    container_name: samba
-    environment:
-      USERID: 1000
-      GROUPID: 1000
-      TZ: "America/Los_Angeles"
-      NMBD: "True"
-      RECYCLE: "False"
-    restart: unless-stopped
-    networks:
-      - jarvis
-    ports:
-      - "139:139/tcp"
-      - "445:445/tcp"
-    volumes:
-      - /mnt/fillmore:/jarvis
-      - /opt:/opt
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    
+
+#  samba:
+#    image: dperson/samba
+#    container_name: samba
+#    environment:
+#      USERID: 1000
+#      GROUPID: 1000
+#      TZ: "America/Los_Angeles"
+#      NMBD: "False"
+#      RECYCLE: "False"
+##      USER: "karl;xiaohudze"
+#      SHARE: "opt;/opt;yes;no;no;all"
+#    restart: unless-stopped
+#    networks:
+#      - jarvis
+#    ports:
+#      - "139:139/tcp"
+#      - "445:445/tcp"
+#    volumes:
+#      - /mnt/fillmore:/jarvis
+#      - /opt:/opt:z
+#    command: '-s "opt;/opt;yes;no;no;all"'
 
 networks:
   jarvis:
