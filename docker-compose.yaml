@@ -122,7 +122,16 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
-    
+    user: "1000"
+    restart: unless-stopped
+    networks:
+      - jarvis
+    ports:
+      - "3000:3000"
+    volumes:
+      - /opt/appdata/grafana/config:/etc/grafana
+      - /opt/appdata/grafana/data:/var/lib/grafana
+      - /etc/localtime:/etc/localtime:ro
 
 #  samba:
 #    image: dperson/samba
