@@ -138,6 +138,22 @@ services:
 #      - /opt/appdata/grafana/data:/var/lib/grafana
       - /etc/localtime:/etc/localtime:ro
 
+  foldingathome:
+    image: linuxserver/foldingathome
+    container_name: foldingathome
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    networks:
+      - jarvis
+    volumes:
+      - /opt/appdata/foldingathome:/config
+    ports:
+      - 7396:7396
+      - 36330:36330 #optional
+    restart: unless-stopped
+
 #  samba:
 #    image: dperson/samba
 #    container_name: samba
