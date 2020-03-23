@@ -122,15 +122,20 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
-    user: "1000"
+#    user: "1000"
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:grafana.wooster.xyz"
+      traefik.port: "3000"
+      traefik.docker.network: "plexguide"
     restart: unless-stopped
     networks:
       - jarvis
-    ports:
-      - "3000:3000"
+#    ports:
+#      - "3000:3000"
     volumes:
-      - /opt/appdata/grafana/config:/etc/grafana
-      - /opt/appdata/grafana/data:/var/lib/grafana
+#      - /opt/appdata/grafana/config:/etc/grafana
+#      - /opt/appdata/grafana/data:/var/lib/grafana
       - /etc/localtime:/etc/localtime:ro
 
 #  samba:
