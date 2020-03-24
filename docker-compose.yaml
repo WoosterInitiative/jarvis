@@ -154,6 +154,25 @@ services:
       - 36330:36330 #optional
     restart: unless-stopped
 
+  deluge:
+    image: linuxserver/deluge
+    container_name: deluge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:deluge.wooster.xyz"
+      traefik.port: "8112"
+      traefik.docker.network: "plexguide"
+    networks:
+      - jarvis
+    volumes:
+      - /mnt:/mnt
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/appdata/deluge:/config
+
 #  samba:
 #    image: dperson/samba
 #    container_name: samba
