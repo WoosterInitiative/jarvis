@@ -178,6 +178,18 @@ services:
       - /opt/appdata/deluge:/config
       - deluge-downloads:/downloads
 
+  influxdb:
+    image: influxdb
+    container_name: influxdb
+    restart: unless-stopped
+    networks:
+      - jarvis
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+    volumes:
+      - /opt/appdata/influxdb:/var/lib/influxdb
+
 #  samba:
 #    image: dperson/samba
 #    container_name: samba
