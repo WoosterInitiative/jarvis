@@ -166,12 +166,17 @@ services:
       traefik.frontend.rule: "Host:deluge.wooster.xyz"
       traefik.port: "8112"
       traefik.docker.network: "plexguide"
+    restart: unless-stopped
     networks:
       - jarvis
+#      - bridge
+    ports:
+      - "8112:8112"
     volumes:
       - /mnt:/mnt
-      - /etc/localtime:/etc/localtime:ro
+#      - /etc/localtime:/etc/localtime:ro
       - /opt/appdata/deluge:/config
+      - deluge-downloads:/downloads
 
 #  samba:
 #    image: dperson/samba
@@ -199,3 +204,9 @@ networks:
   jarvis:
     external:
       name: plexguide
+#  bridge:
+#    external:
+#      name: bridge
+
+volumes:
+  deluge-downloads:
