@@ -46,7 +46,7 @@ services:
       traefik.enable: "true"
       traefik.http.routers.grocy.rule: Host(`house.wooster.xyz`)
       traefik.http.routers.grocy.entrypoints: websecure
-      traefik.http.routers.grocy.tls.certresolver: myresolver      
+      traefik.http.routers.grocy.tls.certresolver: myresolver
 #      traefik.frontend.priority: "50"
       # traefik.frontend.rule: "Host:house.wooster.xyz"
       # traefik.port: "80"
@@ -130,11 +130,14 @@ services:
       TZ: "America/Los_Angeles"
     labels:
       traefik.enable: "true"
-      traefik.protocol: "https"
-      traefik.frontend.redirect.entryPoint: "https"
-      traefik.frontend.rule: "Host:files.wooster.xyz"
-      traefik.port: "443"
-      traefik.docker.network: "plexguide"
+      traefik.http.routers.grocy.rule: Host(`files.wooster.xyz`)
+      traefik.http.routers.grocy.entrypoints: websecure
+      traefik.http.routers.grocy.tls.certresolver: myresolver
+      # traefik.protocol: "https"
+      # traefik.frontend.redirect.entryPoint: "https"
+      # traefik.frontend.rule: "Host:files.wooster.xyz"
+      # traefik.port: "443"
+      # traefik.docker.network: "plexguide"
     restart: unless-stopped
     networks:
       - jarvis
