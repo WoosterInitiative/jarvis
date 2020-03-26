@@ -1,5 +1,31 @@
 version: '3'
 services:
+  traefikv2:
+    image: traefik:v2.2.0
+    container_name: traefikv2
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+#      - /opt/appdata/traefikv2/traefik.yml:/etc/traefik/traefik.yml
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  whoami:
+    image: "containous/whoami"
+    container_name: "simple-service"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`whoami.wooster.xyz`)"
+      - "traefik.http.routers.whoami.entrypoints.web"
+    networks:
+      - jarvis
+
   grocy:
     image: "linuxserver/grocy"
     container_name: grocy
@@ -192,16 +218,20 @@ services:
 
   bind:
     image: sameersbn/bind:9.11.3-20190706
+    container_name: bind
     labels:
       traefik.enable: "true"
+      traefik.protocol: "https"
+      traefik.frontend.redirect.entryPoint: "https"
       traefik.frontend.rule: "Host:dns.wooster.xyz"
       traefik.port: "10000"
       traefik.docker.network: "plexguide"
     networks:
       - jarvis
     ports:
-      - "53:53/udp"
-      - "53:53/tcp"
+      - "10.46.119.25:53:53/udp"
+      - "10.46.119.25:53:53/tcp"
+      - "10000:10000"
     volumes:
       - /opt/appdata/bind:/data
 
