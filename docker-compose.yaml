@@ -130,9 +130,9 @@ services:
       TZ: "America/Los_Angeles"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.grocy.rule: Host(`files.wooster.xyz`)
-      traefik.http.routers.grocy.entrypoints: websecure
-      traefik.http.routers.grocy.tls.certresolver: myresolver
+      traefik.http.routers.whoami.rule: Host(`files.wooster.xyz`)
+      traefik.http.routers.whoami.entrypoints: websecure
+      traefik.http.routers.whoami.tls.certresolver: myresolver
       # traefik.protocol: "https"
       # traefik.frontend.redirect.entryPoint: "https"
       # traefik.frontend.rule: "Host:files.wooster.xyz"
