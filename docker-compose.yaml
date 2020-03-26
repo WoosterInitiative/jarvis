@@ -1,28 +1,28 @@
 version: '3'
 services:
-  traefikv2:
-    image: traefik:v2.2.0
-    container_name: traefikv2
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
-      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myresolver.acme.email=wawooster.dev@gmail.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    volumes:
-      - /opt/appdata/traefikv2/acme/letsencrypt:/letsencrypt
-#      - /opt/appdata/traefikv2/traefik.yml:/etc/traefik/traefik.yml
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+#   traefikv2:
+#     image: traefik:v2.2.0
+#     container_name: traefikv2
+#     command:
+#       - "--api.insecure=true"
+#       - "--providers.docker=true"
+#       - "--providers.docker.exposedbydefault=false"
+#       - "--entrypoints.web.address=:80"
+#       - "--entrypoints.websecure.address=:443"
+#       - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+#       - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+#       #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+#       - "--certificatesresolvers.myresolver.acme.email=wawooster.dev@gmail.com"
+#       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+#     restart: unless-stopped
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#       - "8080:8080"
+#     volumes:
+#       - /opt/appdata/traefikv2/acme/letsencrypt:/letsencrypt
+# #      - /opt/appdata/traefikv2/traefik.yml:/etc/traefik/traefik.yml
+#       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   # whoami:
   #   image: "containous/whoami"
@@ -44,14 +44,14 @@ services:
       TZ: "America/Los_Angeles"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.grocy.rule: Host(`house.wooster.xyz`)
-      traefik.http.routers.grocy.entrypoints: websecure
-      traefik.http.routers.grocy.tls.certresolver: myresolver
-      traefik.http.services.grocy.loadbalancer.server.port: 80
-#      traefik.frontend.priority: "50"
-      # traefik.frontend.rule: "Host:house.wooster.xyz"
-      # traefik.port: "80"
-      # traefik.docker.network: "plexguide"
+      # traefik.http.routers.grocy.rule: Host(`house.wooster.xyz`)
+      # traefik.http.routers.grocy.entrypoints: websecure
+      # traefik.http.routers.grocy.tls.certresolver: myresolver
+      # traefik.http.services.grocy.loadbalancer.server.port: 80
+      # traefik.frontend.priority: "50"
+      traefik.frontend.rule: "Host:house.wooster.xyz"
+      traefik.port: "80"
+      traefik.docker.network: "plexguide"
     restart: unless-stopped
     networks:
       - jarvis
@@ -131,15 +131,15 @@ services:
       TZ: "America/Los_Angeles"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.nextcloud.rule: Host(`files.wooster.xyz`)
-      traefik.http.routers.nextcloud.entrypoints: websecure
-      traefik.http.routers.nextcloud.tls.certresolver: myresolver
-      traefik.http.services.nextcloud.loadbalancer.server.port: 443
-      # traefik.protocol: "https"
-      # traefik.frontend.redirect.entryPoint: "https"
-      # traefik.frontend.rule: "Host:files.wooster.xyz"
-      # traefik.port: "443"
-      # traefik.docker.network: "plexguide"
+      # traefik.http.routers.nextcloud.rule: Host(`files.wooster.xyz`)
+      # traefik.http.routers.nextcloud.entrypoints: websecure
+      # traefik.http.routers.nextcloud.tls.certresolver: myresolver
+      # traefik.http.services.nextcloud.loadbalancer.server.port: 443
+      traefik.protocol: "https"
+      traefik.frontend.redirect.entryPoint: "https"
+      traefik.frontend.rule: "Host:files.wooster.xyz"
+      traefik.port: "443"
+      traefik.docker.network: "plexguide"
     restart: unless-stopped
     networks:
       - jarvis
@@ -168,13 +168,13 @@ services:
 #    user: "1000"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.grafana.rule: Host(`grafana.wooster.xyz`)
-      traefik.http.routers.grafana.entrypoints: websecure
-      traefik.http.routers.grafana.tls.certresolver: myresolver
-      traefik.http.services.grafana.loadbalancer.server.port: 3000
-#      traefik.frontend.rule: "Host:grafana.wooster.xyz"
-#      traefik.port: "3000"
-#      traefik.docker.network: "plexguide"
+      # traefik.http.routers.grafana.rule: Host(`grafana.wooster.xyz`)
+      # traefik.http.routers.grafana.entrypoints: websecure
+      # traefik.http.routers.grafana.tls.certresolver: myresolver
+      # traefik.http.services.grafana.loadbalancer.server.port: 3000
+     traefik.frontend.rule: "Host:grafana.wooster.xyz"
+     traefik.port: "3000"
+     traefik.docker.network: "plexguide"
     restart: unless-stopped
     networks:
       - jarvis
@@ -271,10 +271,13 @@ services:
       APP_URL: snipe-it.wooster.xyz
     labels:
       traefik.enable: true
-      traefik.http.routers.snipeit.rule: Host(`snipe-it.wooster.xyz`)
+      traefik.frontend.rule: "Host:snipe-it.wooster.xyz"
+      traefik.port: 80
+      traefik.docker.network: plexguide
+      # traefik.http.routers.snipeit.rule: Host(`snipe-it.wooster.xyz`)
       # treafik.http.routers.snipeit.entrypoints: websecure
       # traefik.http.routers.snipeit.tls.certresolver: myresolver
-      traefik.http.services.snipeit.loadbalancer.server.port: 81
+      # traefik.http.services.snipeit.loadbalancer.server.port: 81
     networks:
       - jarvis
     volumes:
