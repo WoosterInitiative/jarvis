@@ -21,7 +21,7 @@ services:
       - "8080:8080"
     volumes:
       - /opt/appdata/traefikv2/acme/letsencrypt:/letsencrypt
-      - /opt/appdata/traefikv2/traefik.yml:/etc/traefik/traefik.yml
+#      - /opt/appdata/traefikv2/traefik.yml:/etc/traefik/traefik.yml
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   whoami:
