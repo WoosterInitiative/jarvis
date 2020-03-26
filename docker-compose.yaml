@@ -8,13 +8,21 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=wawooster.dev@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
     volumes:
-#      - /opt/appdata/traefikv2/traefik.yml:/etc/traefik/traefik.yml
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/appdata/traefikv2/acme/letsencrypt:/letsencrypt
+      - /opt/appdata/traefikv2/traefik.yml:/etc/traefik/traefik.yml
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   whoami:
     image: "containous/whoami"
@@ -22,7 +30,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.whoami.rule=Host(`whoami.wooster.xyz`)"
-      - "traefik.http.routers.whoami.entrypoints.web"
+      - "traefik.http.routers.whoami.entrypoints.websecure"
+      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
     networks:
       - jarvis
 
