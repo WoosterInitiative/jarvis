@@ -190,6 +190,21 @@ services:
     volumes:
       - /opt/appdata/influxdb:/var/lib/influxdb
 
+  bind:
+    image: sameersbn/bind:9.11.3-20190706
+    labels:
+      traefik.enable: "true"
+      traefik.frontend.rule: "Host:dns.wooster.xyz"
+      traefik.port: "10000"
+      traefik.docker.network: "plexguide"
+    networks:
+      - jarvis
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    volumes:
+      - /opt/appdata/bind:/data
+
 #  samba:
 #    image: dperson/samba
 #    container_name: samba
