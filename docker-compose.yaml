@@ -24,16 +24,16 @@ services:
 #      - /opt/appdata/traefikv2/traefik.yml:/etc/traefik/traefik.yml
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
-  whoami:
-    image: "containous/whoami"
-    container_name: "simple-service"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`whoami.wooster.xyz`)"
-      - "traefik.http.routers.whoami.entrypoints.websecure"
-      - "traefik.http.routers.whoami.tls.certresolver=myresolver"
-    networks:
-      - jarvis
+  # whoami:
+  #   image: "containous/whoami"
+  #   container_name: "simple-service"
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.whoami.rule=Host(`whoami.wooster.xyz`)"
+  #     - "traefik.http.routers.whoami.entrypoints=websecure"
+  #     - "traefik.http.routers.whoami.tls.certresolver=myresolver"
+  #   networks:
+  #     - jarvis
 
   grocy:
     image: "linuxserver/grocy"
@@ -44,10 +44,13 @@ services:
       TZ: "America/Los_Angeles"
     labels:
       traefik.enable: "true"
+      traefik.http.routers.grocy.rule: Host(`house.wooster.xyz`)
+      traefik.http.routers.grocy.entrypoints: websecure
+      traefik.http.routers.grocy.tls.certresolver: myresolver      
 #      traefik.frontend.priority: "50"
-      traefik.frontend.rule: "Host:house.wooster.xyz"
-      traefik.port: "80"
-      traefik.docker.network: "plexguide"
+      # traefik.frontend.rule: "Host:house.wooster.xyz"
+      # traefik.port: "80"
+      # traefik.docker.network: "plexguide"
     restart: unless-stopped
     networks:
       - jarvis
