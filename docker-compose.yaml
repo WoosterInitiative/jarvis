@@ -299,6 +299,44 @@ services:
     volumes:
       - /opt/appdata/snipe-it:/config
 
+    teamspeak_db:
+      image: linuxserver/mariadb
+      container_name: db_teamspeak
+      environment:
+        PUID: 1000
+        PGID: 1000
+        TZ: America/Los_Angeles
+        MYSQL_DATABASE: ts3
+        MYSQL_ROOT_PASSWORD: PcwJ9Qd5DT
+        MYSQL_USER: ts3
+        MYSQL_PASSWORD: ts3
+      restart: unless-stopped
+      networks:
+        - jarvis
+      volumes:
+        - /opt/appdata/db_teamspeak:/config
+
+  teamspeak:
+    image: teamspeak
+    restart: unless-stopped
+    ports:
+      - 9987:9987/udp
+      - 10011:10011
+      - 30033:30033
+    environment:
+      TS3SERVER_DB_PLUGIN: ts3db_mariadb
+      TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+      TS3SERVER_DB_HOST: teamspeak_db
+      TS3SERVER_DB_USER: ts3
+      TS3SERVER_DB_PASSWORD: ts3
+      TS3SERVER_DB_NAME: teamspeak
+      TS3SERVER_DB_WAITUNTILREADY: 30
+      TS3SERVER_LICENSE: accept
+    networks:
+      - jarvis
+    volumes:
+      - /opt/appdata/teamspeak:/var/ts3server
+
 #  samba:
 #    image: dperson/samba
 #    container_name: samba
