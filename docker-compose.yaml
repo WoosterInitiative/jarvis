@@ -172,9 +172,9 @@ services:
       # traefik.http.routers.grafana.entrypoints: websecure
       # traefik.http.routers.grafana.tls.certresolver: myresolver
       # traefik.http.services.grafana.loadbalancer.server.port: 3000
-     traefik.frontend.rule: "Host:grafana.wooster.xyz"
-     traefik.port: "3000"
-     traefik.docker.network: "plexguide"
+      traefik.frontend.rule: "Host:grafana.wooster.xyz"
+      traefik.port: "3000"
+      traefik.docker.network: "plexguide"
     restart: unless-stopped
     networks:
       - jarvis
@@ -255,6 +255,22 @@ services:
       - "10000:10000"
     volumes:
       - /opt/appdata/bind:/data
+
+  snipeit_db:
+    image: linuxserver/mariadb
+    container_name: db_snipe-it
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/Los_Angeles
+      MYSQL_DATABASE: snipe-it
+      MYSQL_ROOT_PASSWORD: PcwJ9Qd5DT
+      MYSQL_USER: snipe-it
+      MYSQL_PASSWORD: snipe-it
+    networks:
+      - jarvis
+    volumes:
+      - /opt/appdata/db_snipe-it:/config
 
   snipeit:
     image: linuxserver/snipe-it
